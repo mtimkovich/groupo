@@ -42,10 +42,8 @@
 <fb:login-button autologoutlink="true" show-faces="false" width="200" max-rows="1"></fb:login-button>
 
 <br>
-<ul>
-  <li>{{first_name}}</li>
-  <li>{{last_name}}</li>
-  <li>{{facebook_id}}</li>
-  <li>{{count}}</li>
+{% if first_name %}
+  Hello, {{first_name}}!
+{% endif %}
 </body>
 </html>
