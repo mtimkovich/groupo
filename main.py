@@ -7,20 +7,22 @@ import logging
 import os
 import sys
 
-
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 
 import models
 
 urls = (
-        "/", "index",
+    "/login", "login",
+    "/", "index",
 )
 
+# Set up templates
 template_dir = os.path.join(abspath, "templates")
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
         autoescape = True)
 
+# Read Facebook configuration from file
 FACEBOOK_CONFIG_FILE = os.path.join(os.path.dirname(abspath), "facebook_api.yaml")
 
 fb = open(FACEBOOK_CONFIG_FILE)
@@ -34,9 +36,11 @@ def render(template, **params):
 
 class index:
     def GET(self):
-        cookie = facebook.get_user_from_cookie(web.cookies(), FACEBOOK["id"], FACEBOOK["secret"])
+        return render("index.html")
 
-        first_name = ""
+class login:
+    def GET(self):
+        cookie = facebook.get_user_from_cookie(web.cookies(), FACEBOOK["id"], FACEBOOK["secret"])
 
         if cookie:
             graph = facebook.GraphAPI(cookie["access_token"])
@@ -51,8 +55,7 @@ class index:
             if not user:
                 models.User.register(facebook_id, first_name, last_name)
 
-        return render("index.html", first_name=first_name)
+        return render("login.html")
 
-app = web.application(urls, globals())
-application = app.wsgifunc()
 
+application = web.application(urls, globals()).wsgifunc()

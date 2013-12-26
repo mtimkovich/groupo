@@ -23,6 +23,7 @@ class User:
         self.last_name = row["last_name"]
         self.created = row["created"]
 
+    # Find user by facebook id
     @classmethod
     def by_id(cls, id):
         conn = psycopg2.connect(DB_CONFIG)
@@ -41,6 +42,7 @@ class User:
 
         return u
 
+    # Add user to users database
     @classmethod
     def register(cls, facebook_id, first_name, last_name):
         conn = psycopg2.connect(DB_CONFIG)
